@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  arma3server:
+    container_name: "arma3-server"
+    image: "ghcr.io/gameservermanagers/gameserver:arma3"
+    restart: always
+    volumes: # Set a config where the serverfiles are persisted
+      - ./arma3-config/serverfiles:/data:z
+    ports:
+      - "2344:2344/udp"
+      - "2344:2344/tcp"
+      - "2345:2345/tcp"
+      - "2302-2306:2302-2306/udp"
+    deploy: # This should be set to allow 8 - 14 GB of RAM
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 5G
