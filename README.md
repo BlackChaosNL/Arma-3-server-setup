@@ -1,4 +1,4 @@
-# Arma 3 server setup using LinuxGSM
+# Arma 3 dedicated server setup using LinuxGSM
 
 ## Linux warning
 
@@ -75,8 +75,11 @@ docker-compose --version
 > * You will also need an account with ARMA 3 purchased, to download mods, if you need them.
 
 > [!NOTE]
-> Make sure the follow ports are open! 
->
+> Make sure the following ports are open, since these are the default ports for arma 3! 
+> - 2344:2344/udp
+> - 2344:2344/tcp
+> - 2345:2345/tcp
+> - 2302-2306:2302-2306/udp
 > 
 
 ### Getting started
