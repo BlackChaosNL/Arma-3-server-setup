@@ -21,7 +21,7 @@ function workshop_download () {
 function move_workshop_item () {
     if [ ! -d /app/serverfiles/mods/$2 ]; then
         mkdir /app/serverfiles/mods/$2
-	else
+    else
         # Clean old stuff up.
         rm -r /app/serverfiles/mods/$2
         mkdir /app/serverfiles/mods/$2
