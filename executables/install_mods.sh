@@ -62,7 +62,7 @@ function remove_mod_signing_keys_from_server () {
     popd
 };
 
-check_mod_names_and_mods_array_lengths () {
+function check_mod_names_and_mods_array_lengths () {
     local -n array1="$1"
     local -n array2="$2"
 
