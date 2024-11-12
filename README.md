@@ -270,14 +270,15 @@ And login to the steamcmd when prompted.
 
 When the mods downloads are done, add the mods you've downloaded to your server:
 
+> [!WARNING]
+> The Mod Downloader now sets the below modlist upon finishing the downloads of the mods. You do not need to set the modlist manually. Restart your server when the `./install_mods.sh` is finished.
+
+## Manual setting of the mods
 You need to move to the LinuxGSM folder:
 
 ```bash
 cd /app/lgsm/config-lgsm/arma3server
 ```
-
-> [!NOTE]
-> The mod downloader hasn't been made to automatically add mods to the instance settings. The author would like to make it automatic in the future.
 
 > [!NOTE]
 > Add your mods in this format: `mods="mods/@antistasi\;"`.
