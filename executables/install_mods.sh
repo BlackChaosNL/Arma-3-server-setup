@@ -49,7 +49,7 @@ function check_and_fix_depth () {
 };
 
 function apply_mod_signing_keys_to_server () {
-	for dir in Keys keys key; do
+	for dir in Keys keys Key key; do
 		if [ -d /app/serverfiles/mods/$1/$dir ]; then
 			cp -r /app/serverfiles/mods/$1/$dir/*.bikey /app/serverfiles/keys/
 		fi
