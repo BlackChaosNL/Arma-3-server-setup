@@ -34,7 +34,7 @@ function move_workshop_item () {
 
 # If any mod name contains any uppercase character, clean it, since arma cannot deal with this.
 function check_and_fix_depth () {
-	depth=0
+	local depth=0
 	for x in $(find . -type d | sed "s/[^/]//g"); do
 	if [ ${depth} -lt ${#x} ]; then
 	  depth=${#x}
@@ -63,9 +63,40 @@ function remove_mod_signing_keys_from_server () {
 	popd
 }
 
+check_mod_names_and_mods_array_lengths () {
+    local -n array1="$1"
+    local -n array2="$2"
+
+    if [[ ! ${#array1[@]} -eq ${#array2[@]} ]]; then
+        echo "Arrays MOD_NAMES and MODS are not correctly filled, please check."
+		exit 1
+    fi
+}
+
+function replace_mods_value () {
+	local -n MOD_ARRAY=$1
+	local LINUXGSM_SERVER_CONFIG="/app/lgsm/config-lgsm/arma3server/arma3server.cfg"
+    local MOD_LIST=""
+
+    if [[ ! -e "$LINUXGSM_SERVER_CONFIG" ]]; then
+        echo "Error: File $LINUXGSM_SERVER_CONFIG does not exist."
+        return 1
+    fi
+
+	for mod in "${MOD_ARRAY[@]}"; do
+    	MOD_LIST+="mods/${mod}\;"
+	done
+
+    # Use sed to find the line and replace the current value of mods with the new string
+    sed -i "s/^mods=\"[^\"]*\"/mods=\"$MOD_LIST\"/" "$LINUXGSM_SERVER_CONFIG"
+
+    echo "The mods value has been updated in $LINUXGSM_SERVER_CONFIG."
+}
+
 function start () {
-	counter=1
-	maxtries=5
+	local counter=1
+	local maxtries=5
+	check_mod_names_and_mods_array_lengths ${MOD_NAMES} ${MODS}
 	remove_mod_signing_keys_from_server
 	steamcmd +login $STEAM_ACCT_USERNAME +quit # buffer steam login for mod download and update!
 	for i in ${!MODS[*]};
@@ -84,6 +115,7 @@ function start () {
 		sleep 5 # Prevent downloading too fast and getting rate limited.
 	done
 	check_and_fix_depth
+	replace_mods_value ${MODS}
 	echo "Thank you for using Mod Downloader!"
 };
 
