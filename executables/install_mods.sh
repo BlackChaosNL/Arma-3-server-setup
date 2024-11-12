@@ -73,7 +73,7 @@ function check_mod_names_and_mods_array_lengths () {
 };
 
 function replace_mods_value () {
-    local -n MOD_ARRAY=$1
+    local -n MOD_ARRAY="$1"
     local LINUXGSM_SERVER_CONFIG="/app/lgsm/config-lgsm/arma3server/arma3server.cfg"
     local MOD_LIST=""
 
