@@ -60,7 +60,7 @@ function remove_mod_signing_keys_from_server () {
     cd /app/serverfiles/keys/
     find . ! -name a3.bikey -maxdepth 1 -type f -delete
     popd
-}
+};
 
 check_mod_names_and_mods_array_lengths () {
     local -n array1="$1"
@@ -70,7 +70,7 @@ check_mod_names_and_mods_array_lengths () {
         echo "Arrays MOD_NAMES and MODS are not correctly filled, please check."
         exit 1
     fi
-}
+};
 
 function replace_mods_value () {
     local -n MOD_ARRAY=$1
@@ -90,7 +90,7 @@ function replace_mods_value () {
     sed -i "s/^mods=\"[^\"]*\"/mods=\"$MOD_LIST\"/" "$LINUXGSM_SERVER_CONFIG"
 
     echo "The mods value has been updated in $LINUXGSM_SERVER_CONFIG."
-}
+};
 
 function start () {
     local counter=1
