@@ -9,8 +9,8 @@ STEAM_ACCT_USERNAME="{steam account with ARMA 3 BOUGHT!}"
 ARMA3_ID=107410
 
 # Fill these two arrays with the mods of choosing. Make sure the mod names are correct.
-MOD_NAMES=("@antistasi")
-MODS=(2867537125)
+MOD_NAMES=("@antistasi" "@cba_a3" "@enhanced_movement" "@rhsafrf" "@rhsusaf" "@advanced_sling_loading" "@advanced_towing")
+MODS=(2867537125 450814997 333310405 843425103 843577117 615007497 639837898)
 
 function workshop_download () {
     steamcmd +login $STEAM_ACCT_USERNAME +workshop_download_item $ARMA3_ID $1 validate +quit
@@ -54,17 +54,16 @@ function apply_mod_signing_keys_to_server () {
         fi
     done
 };
-
 function remove_mod_signing_keys_from_server () {
     pushd $(pwd)
     cd /app/serverfiles/keys/
-    find . ! -name a3.bikey -maxdepth 1 -type f -delete
+    find . -maxdepth 1 ! -name a3.bikey -type f -delete
     popd
 };
 
 function check_mod_names_and_mods_array_lengths () {
-    local -n array1="$1"
-    local -n array2="$2"
+    array1="$1"
+    array2="$2"
 
     if [[ ! ${#array1[@]} -eq ${#array2[@]} ]]; then
         echo "Arrays MOD_NAMES and MODS are not correctly filled, please check."
@@ -73,9 +72,9 @@ function check_mod_names_and_mods_array_lengths () {
 };
 
 function replace_mods_value () {
-    local -n MOD_ARRAY="$1"
-    local LINUXGSM_SERVER_CONFIG="/app/lgsm/config-lgsm/arma3server/arma3server.cfg"
-    local MOD_LIST=""
+    MOD_ARRAY="$1"
+    LINUXGSM_SERVER_CONFIG="/app/lgsm/config-lgsm/arma3server/arma3server.cfg"
+    MOD_LIST=""
 
     if [[ ! -e "$LINUXGSM_SERVER_CONFIG" ]]; then
         echo "Error: File $LINUXGSM_SERVER_CONFIG does not exist."
@@ -87,14 +86,14 @@ function replace_mods_value () {
     done
 
     # Use sed to find the line and replace the current value of mods with the new string
-    sed -i "s/^mods=\"[^\"]*\"/mods=\"$MOD_LIST\"/" "$LINUXGSM_SERVER_CONFIG"
+    sed -i "s/^mods=\".*\"$/mods=\"$MOD_LIST\"/g" $LINUXGSM_SERVER_CONFIG
 
     echo "The mods value has been updated in $LINUXGSM_SERVER_CONFIG."
 };
 
 function start () {
-    local counter=1
-    local maxtries=5
+    counter=1
+    maxtries=5
     check_mod_names_and_mods_array_lengths ${MOD_NAMES} ${MODS}
     remove_mod_signing_keys_from_server
     steamcmd +login $STEAM_ACCT_USERNAME +quit # buffer steam login for mod download and update!
@@ -111,8 +110,7 @@ function start () {
         apply_mod_signing_keys_to_server ${MOD_NAMES[$i]}
         sleep 5 # Prevent downloading too fast and getting rate limited.
     done
-    check_and_fix_depth
-    replace_mods_value ${MODS}
+    replace_mods_value ${MOD_NAMES}
     echo "Thank you for using Mod Downloader!"
 };
 
